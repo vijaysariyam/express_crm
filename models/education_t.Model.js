@@ -13,12 +13,16 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			school: {
 				type: DataTypes.STRING(255),
+				allowNull: false,
 			},
 			degree: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			major: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
+				timestamps: false,
 			},
 		},
 		{

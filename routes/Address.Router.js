@@ -9,4 +9,7 @@ router.post('/address/', UserController.create);
 router.put('/address/:id', UserController.updateById);
 router.delete('/address/:id', UserController.deleteById);
 
+router.post('/addresses', UserController.create);
+router.get('/addresses', UserController.getAll);
+
 module.exports = router;

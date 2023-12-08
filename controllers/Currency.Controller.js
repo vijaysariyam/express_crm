@@ -1,4 +1,5 @@
 const connectToDatabase = require('../config/db');
+const { v4: uuidv4 } = require('uuid');
 
 // Get all data
 const getAll = async (req, res) => {
@@ -28,13 +29,15 @@ const getById = async (req, res) => {
 
 // Create a new data
 const create = async (req, res) => {
-	const { id, email, password, first_name, last_name } = req.body;
+	const { code } = req.body;
+	const id = uuidv4();
+
 	try {
 		const { Currency } = await connectToDatabase();
-		const newUser = await Currency.create({ id, email, password, first_name, last_name });
-		res.status(200).json(newUser);
+		const data = await Currency.create({ id, code });
+		res.status(200).json(data);
 	} catch (error) {
-		res.status(400).json({ error: 'Bad Request' });
+		res.status(400).json({ error: 'Bad Request' + error });
 	}
 };
 

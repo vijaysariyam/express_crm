@@ -10,11 +10,13 @@ module.exports = (sequelize, DataTypes) => {
 			code: {
 				type: DataTypes.STRING(3),
 				allowNull: false,
+				unique: true,
 			},
 		},
 		{
 			tableName: 'currency_t',
 			engine: 'InnoDB',
+			timestamps: false,
 		}
 	);
 

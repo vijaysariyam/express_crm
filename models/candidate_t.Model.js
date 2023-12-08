@@ -13,21 +13,27 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			first_name: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			last_name: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			age: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			department: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			min_salary_expectation: {
 				type: DataTypes.DECIMAL(10, 2),
+				allowNull: false,
 			},
 			max_salary_expectation: {
 				type: DataTypes.DECIMAL(10, 2),
+				allowNull: false,
 			},
 			currency_id: {
 				type: DataTypes.STRING(36),
@@ -41,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			tableName: 'candidate_t',
 			engine: 'InnoDB',
+			timestamps: false,
 		}
 	);
 

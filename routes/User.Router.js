@@ -10,5 +10,7 @@ router.put('/user/:id', UserController.updateById);
 router.delete('/user/:id', UserController.deleteById);
 
 router.post('/register', UserController.register);
+router.post('/login', UserController.login);
+router.post('/referesh', UserController.referesh);
 
 module.exports = router;

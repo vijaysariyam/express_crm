@@ -13,14 +13,17 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			skill: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			level: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 		},
 		{
 			tableName: 'skill_t',
 			engine: 'InnoDB',
+			timestamps: false,
 		}
 	);
 

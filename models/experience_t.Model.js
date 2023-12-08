@@ -13,17 +13,21 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			company: {
 				type: DataTypes.STRING(255),
+				allowNull: false,
 			},
 			title: {
 				type: DataTypes.STRING(100),
+				allowNull: false,
 			},
 			years: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 		},
 		{
 			tableName: 'experience_t',
 			engine: 'InnoDB',
+			timestamps: false,
 		}
 	);
 
