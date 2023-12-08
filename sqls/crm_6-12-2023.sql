@@ -27,9 +27,9 @@ CREATE TABLE currency_t (
     id VARCHAR(36) PRIMARY KEY NOT NULL,
     code VARCHAR(3) NOT NULL UNIQUE
 );
-INSERT INTO currency_t (id , code) VALUES("1" , 'USD')
-INSERT INTO currency_t (id , code) VALUES("2" , 'EUR')
-INSERT INTO currency_t (id , code) VALUES("3" , 'GBP')
+-- INSERT INTO currency_t (id , code) VALUES("1" , 'USD')
+-- INSERT INTO currency_t (id , code) VALUES("2" , 'EUR')
+-- INSERT INTO currency_t (id , code) VALUES("3" , 'GBP')
 
 CREATE TABLE address_t (
     id VARCHAR(36) PRIMARY KEY NOT NULL,
