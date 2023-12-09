@@ -2,18 +2,19 @@ const express = require('express');
 const { authenticateToken } = require('../services/jwt.js');
 
 const router = express.Router();
-const UserController = require('../controllers/Candidate.Controller.js'); // Update the path accordingly
+const CandidateController = require('../controllers/Candidate.Controller.js'); // Update the path accordingly
 
 // Routes for User CRUD operations
 
-router.get('/candidate/:id', UserController.getById);
-router.post('/candidate/', UserController.create);
-router.put('/candidate/:id', UserController.updateById);
-router.delete('/candidate/:id', UserController.deleteById);
+// router.get('/candidate/:id', CandidateController.getById);
+// router.post('/candidate/', CandidateController.create);
+// router.put('/candidate/:id', CandidateController.updateById);
+// router.delete('/candidate/:id', CandidateController.deleteById);
 
-router.post('/candidates', authenticateToken, UserController.create);
-router.post('/candidates/:id', authenticateToken, UserController.updateById);
-router.get('/candidates/:id', authenticateToken, UserController.getById);
-router.delete('/candidates/:id', UserController.deleteById);
-router.get('/candidates', authenticateToken, UserController.getAll);
+router.post('/candidates', authenticateToken, CandidateController.create);
+router.post('/candidates/:id', authenticateToken, CandidateController.updateById);
+router.get('/candidates/:id', authenticateToken, CandidateController.getById);
+// router.delete('/candidates/:id', CandidateController.deleteById);
+router.get('/candidates', authenticateToken, CandidateController.getAll);
+router.post('/candidate/search', authenticateToken, CandidateController.search);
 module.exports = router;

@@ -24,9 +24,9 @@ function authenticateToken(req, res, next) {
 	if (token == null || refreshtoken == null) return res.status(401).json({ error: 'Unauthorized Access' });
 
 	jwt.verify(refreshtoken, 'dhw782wujnd99ahmmakhanjkajikhiwn2n', (error, user) => {
-		if (error) return res.status(403).json({ error: 'Unauthorized: Invalid referesh token ' + error.message });
+		if (error) return res.status(403).json({ error: 'Unauthorized:Invalid referesh token' });
 		jwt.verify(token, 'swsh23hjddnns', (error, user) => {
-			if (error) return res.status(403).json({ error: 'Unauthorized: Invalid auth token ' + error.message });
+			if (error) return res.status(403).json({ error: 'Unauthorized:Invalid auth token' });
 			req.user = user;
 			next();
 		});

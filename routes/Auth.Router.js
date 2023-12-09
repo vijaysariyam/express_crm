@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/Auth.Controller.js'); // Update the path accordingly
+const AuthController = require('../controllers/Auth.Controller.js'); // Update the path accordingly
 
 // Routes for User CRUD operations
-router.get('/auth/', UserController.getAll);
-router.get('/auth/:id', UserController.getById);
-router.post('/auth/', UserController.create);
-router.put('/auth/:id', UserController.updateById);
-router.delete('/auth/:id', UserController.deleteById);
+router.get('/auth/', AuthController.getAll);
+router.get('/auth/:id', AuthController.getById);
+router.post('/auth/', AuthController.create);
+router.put('/auth/:id', AuthController.updateById);
+router.delete('/auth/:id', AuthController.deleteById);
 
 module.exports = router;
