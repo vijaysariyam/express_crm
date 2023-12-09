@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../server.js");
+const { authenticateToken } = require("../services/jwt.js");
 
 describe("Register & Login", () => {
   ///////////////////////////////////////////////////////////////////
@@ -96,22 +97,66 @@ describe("Register & Login", () => {
       });
   });
 
-  it("POST /v1/candidates should return(200) and creates  new candidate and stores owner_id", async () => {
-    const candidateData = {
-      email: `testemail${randomNumber}@example.com`,
-      password: "password123",
+  let currencyID = null;
+  it("POST /v1/currencies should return(200) and creates  new currency useful to candidate insert", async () => {
+    const currencyData = {
+      code: `US${randomNumber}`,
     };
     await request(app)
-      .post("/v1/login")
-      .send(loginData)
+      .post("/v1/currencies")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Refresh", `Bearer ${refreshToken}`)
+      .send(currencyData)
       .expect(200)
       .then((response) => {
-        expect(response.body).toHaveProperty("accessToken");
-        expect(response.body).toHaveProperty("refreshToken");
-        accessToken = response.body.accessToken;
-        refreshToken = response.body.refreshToken;
+        expect(response.body).toHaveProperty("id");
+        currencyID = response.body.id;
       });
   });
 
-  //.set('Authorization', `Bearer ${token}`)
+  let addressID = null;
+  it("POST /v1/addresses should return(200) and creates  new address useful to candidate insert", async () => {
+    const adressData = {
+      country: "country",
+      street_address: "street_address",
+      city: "city",
+      state: "state",
+      postal_code: "postal_code",
+    };
+    await request(app)
+      .post("/v1/addresses")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Refresh", `Bearer ${refreshToken}`)
+      .send(adressData)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toHaveProperty("id");
+        addressID = response.body.id;
+      });
+  });
+
+  let candidateID = null;
+  it("POST /v1/candidates should return(200) and creates  new candidate and stores owner_id", async () => {
+    const candidateData = {
+      owner_id: owner_id,
+      first_name: "first_name",
+      last_name: "last_name",
+      age: 30,
+      department: "department",
+      min_salary_expectation: 8,
+      max_salary_expectation: 12,
+      currency_id: currencyID,
+      address_id: addressID,
+    };
+    console.log(candidateData);
+    await request(app)
+      .post("/v1/candidates")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Refresh", `Bearer ${refreshToken}`)
+      .send(candidateData)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toHaveProperty("id");
+      });
+  });
 });
