@@ -74,7 +74,6 @@ const { join } = require("path");
 const connectToDatabase = require("./config/db");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-const countryRouter = require("./routes/country.route.js");
 const userRouter = require("./routes/User.Router.js");
 const candidateRouter = require("./routes/Candidate.Router.js");
 const currencyRouter = require("./routes/Currency.Router.js");
@@ -113,7 +112,6 @@ app.use(cors());
 app.use(express.json());
 
 const apiVersion = "/v1";
-app.use(apiVersion, countryRouter);
 app.use(apiVersion, userRouter);
 app.use(apiVersion, candidateRouter);
 app.use(apiVersion, currencyRouter);

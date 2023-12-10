@@ -1,5 +1,4 @@
 const Sequelize = require("sequelize");
-const CountryModel = require("../models/country.model");
 
 const UserModel = require("../models/user_t.Model");
 const AddressModel = require("../models/address_t.Model");
@@ -22,8 +21,6 @@ const sequelize = new Sequelize(
   }
 );
 
-const Country = CountryModel(sequelize, Sequelize);
-
 const User = UserModel(sequelize, Sequelize);
 const Address = AddressModel(sequelize, Sequelize);
 const Candidate = CandidateModel(sequelize, Sequelize);
@@ -34,7 +31,6 @@ const Experience = ExperienceModel(sequelize, Sequelize);
 const Currency = CurrencyModel(sequelize, Sequelize);
 
 const Models = {
-  Country,
   User,
   Address,
   Candidate,

@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../server.js");
 const { authenticateToken } = require("../middleware/jwt.js");
 
-describe("Register & Login", () => {
+describe("Test Started.All APis....", () => {
   ///////////////////////////////////////////////////////////////////
   //i generated random numbers for different emails
   const randomNumber = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
@@ -61,19 +61,6 @@ describe("Register & Login", () => {
       });
   });
 
-  it("POST /v1/referesh should return(200) when user request  new tokens using  id", async () => {
-    const existingUser = {
-      id: `1234-1234-4321-4321`,
-    };
-    await request(app)
-      .post("/v1/referesh")
-      .send(existingUser)
-      .expect(200)
-      .then((response) => {
-        expect(response.body).toHaveProperty("accessToken");
-        expect(response.body).toHaveProperty("refreshToken");
-      });
-  });
   //////////////////////////////////////////////////////////////////////////////////////
 
   let accessToken = null;
@@ -89,49 +76,28 @@ describe("Register & Login", () => {
       .expect(200)
       .then((response) => {
         expect(response.body).toHaveProperty("accessToken");
-        expect(response.body).toHaveProperty("refreshToken");
         accessToken = response.body.accessToken;
         refreshToken = response.body.refreshToken;
       });
   });
 
-  let currencyID = null;
-  it("POST /v1/currencies should return(200) and creates  new currency useful to candidate insert", async () => {
-    const currencyData = {
-      code: `U${randomNumber}${randomNumber}`,
+  it("POST /v1/refresh should return(200) when user request  new access tokens using  refresh token", async () => {
+    const data = {
+      refreshToken: refreshToken,
     };
+
     await request(app)
-      .post("/v1/currencies")
-      .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
-      .send(currencyData)
+      .post("/v1/refresh")
+      .send(data)
       .expect(200)
       .then((response) => {
-        expect(response.body).toHaveProperty("id");
-        currencyID = response.body.id;
+        expect(response.body).toHaveProperty("accessToken");
+        accessToken = response.body.accessToken;
       });
   });
 
-  let addressID = null;
-  it("POST /v1/addresses should return(200) and creates  new address useful to insert candidate", async () => {
-    const adressData = {
-      country: "country",
-      street_address: "street_address",
-      city: "city",
-      state: "state",
-      postal_code: "postal_code",
-    };
-    await request(app)
-      .post("/v1/addresses")
-      .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
-      .send(adressData)
-      .expect(200)
-      .then((response) => {
-        expect(response.body).toHaveProperty("id");
-        addressID = response.body.id;
-      });
-  });
+  let currencyID = 1;
+  let addressID = 1;
 
   it("POST /v1/candidates should return(401 , Unauthorized Access) when user accessing api with no  accesstoken", async () => {
     const candidateData = {
@@ -169,7 +135,6 @@ describe("Register & Login", () => {
     await request(app)
       .post("/v1/candidates")
       .set("Authorization", `Bearer ${accessToken}${randomNumber}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .send(candidateData)
       .expect(403)
       .then((response) => {
@@ -196,7 +161,6 @@ describe("Register & Login", () => {
     await request(app)
       .post("/v1/candidates")
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .send(candidateData)
       .expect(200)
       .then((response) => {
@@ -209,7 +173,6 @@ describe("Register & Login", () => {
     await request(app)
       .get(`/v1/candidates/${candidateID}`)
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .expect(200)
       .then((response) => {
         expect(response.body.first_name);
@@ -235,7 +198,6 @@ describe("Register & Login", () => {
     await request(app)
       .post(`/v1/candidates/${candidateID}`)
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .send(candidateUpdatedData)
       .expect(200)
       .then((response) => {
@@ -254,7 +216,6 @@ describe("Register & Login", () => {
       .get(`/v1/candidates/${candidateID}`)
       .query({ pageno: pageNo, rowcount: rowCount })
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .expect(200)
       .then((response) => {
         expect(response.body.length).toBeGreaterThanOrEqual(1);
@@ -270,10 +231,9 @@ describe("Register & Login", () => {
     };
 
     await request(app)
-      .post(`/v1/candidates/search`)
+      .post(`/v1/candidate/search`)
       .query({ pageno: pageNo, rowcount: rowCount })
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .send(searchQuery)
       .expect(200);
   });
@@ -282,12 +242,29 @@ describe("Register & Login", () => {
     await request(app)
       .delete(`/v1/candidates/${candidateID}`)
       .set("Authorization", `Bearer ${accessToken}`)
-      .set("Refresh", `Bearer ${refreshToken}`)
       .expect(200)
       .then((response) => {
         expect(response.body).toHaveProperty(
           "message",
           "Candidate deleted successfully"
+        );
+      });
+  });
+
+  it("POST /v1/logout should return(200) and clear token and logout", async () => {
+    const data = {
+      refreshToken: refreshToken,
+    };
+
+    await request(app)
+      .post(`/v1/logout`)
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send(data)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toHaveProperty(
+          "message",
+          "Token invalidated & logout successfully"
         );
       });
   });

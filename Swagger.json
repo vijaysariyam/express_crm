@@ -50,10 +50,10 @@
                         }
                     },
                     "example": {
-                        "first_name": "srinu",
-                        "last_name": "korakana",
-                        "email": "srinu@example.com",
-                        "password": "srinucnu"
+                        "first_name": "vijay",
+                        "last_name": "sariyam",
+                        "email": "vijay.sariyam@example.com",
+                        "password": "vijay123"
                     }
                     }
                 }
@@ -80,8 +80,8 @@
                         },
                         "example": {
                         "id": 1,
-                        "first_name": "srinu",
-                        "email": "srinu@example.com"
+                        "first_name": "vijay",
+                        "email": "vijay.sariyam@example.com"
                         }
                     }
                     }
@@ -130,8 +130,8 @@
                         }
                     },
                     "example": {
-                        "email": "srinu@example.com",
-                        "password": "password"
+                        "email": "vijay.sariyam@example.com",
+                        "password": "vijay123"
                     }
                     }
                 }
@@ -282,7 +282,7 @@
             ]
             }
         },
-        "/token/refresh": {
+        "/refresh": {
             "post": {
             "tags": ["Authentication"],
             "summary": "Refresh Access Token",
@@ -418,8 +418,8 @@
                         "department": "IT",
                         "min_salary_expectation": 50000.0,
                         "max_salary_expectation": 70000.0,
-                        "currency_id": "30b0751c-2997-11ee-be56-0242ac120002",
-                        "address_id": "72fcdcda-2997-11ee-be56-0242ac120002"
+                        "currency_id": "1",
+                        "address_id": "1"
                       }
                     }
                   }
@@ -500,6 +500,16 @@
                     "name": "page",
                     "in": "query",
                     "description": "Page number for pagination (default: 1).",
+                    "required": false,
+                    "schema": {
+                    "type": "integer",
+                    "format": "int32"
+                    }
+                },
+                {
+                    "name": "rowcount",
+                    "in": "query",
+                    "description": "rows per page (default: 10).",
                     "required": false,
                     "schema": {
                     "type": "integer",
@@ -629,11 +639,34 @@
             }
 
         },
-        "/candidates/search": {
+        "/candidate/search": {
         "post": {
             "tags": ["Candidates"],
             "summary": "Search candidates",
             "description": "Search candidates by first name or last name with pagination.",
+            "parameters": [
+                {
+                    "name": "page",
+                    "in": "query",
+                    "description": "Page number for pagination (default: 1).",
+                    "required": false,
+                    "schema": {
+                    "type": "integer",
+                    "format": "int32"
+                    }
+                },
+                {
+                    "name": "rowcount",
+                    "in": "query",
+                    "description": "rows per page (default: 10).",
+                    "required": false,
+                    "schema": {
+                    "type": "integer",
+                    "format": "int32"
+                    }
+                }
+
+                ],
             "requestBody": {
             "description": "Search query and page number.",
             "required": true,
@@ -642,18 +675,15 @@
                 "schema": {
                     "type": "object",
                     "properties": {
-                    "query": {
+                    "search": {
                         "type": "string"
-                    },
-                    "page": {
-                        "type": "integer",
-                        "format": "int32"
                     }
+                    
                     }
                 },
                 "example": {
-                    "query": "John",
-                    "page": 1
+                    "search": "John"
+                    
                 }
                 }
             }

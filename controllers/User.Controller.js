@@ -1,6 +1,10 @@
 const connectToDatabase = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
-const { requestUserTokens } = require("../middleware/jwt.js");
+const {
+  requestRefereshTokens,
+  requestAccessTokens,
+  verifyRefreshToken,
+} = require("../middleware/jwt.js");
 // Get all data
 const getAll = async (req, res) => {
   try {
@@ -144,12 +148,14 @@ const login = async (req, res) => {
       },
     });
     if (data) {
-      //need data row
-      const tokens = requestUserTokens(data.dataValues);
-      res.cookie("refreshToken", String(tokens.refreshToken), {
+      const accessToken = requestAccessTokens(data.dataValues);
+      const refreshToken = requestRefereshTokens(data.dataValues);
+      res.cookie("refreshToken", String(refreshToken), {
         httpOnly: true,
       });
-      res.status(200).json(tokens);
+      res
+        .status(200)
+        .json({ accessToken: accessToken, refreshToken: refreshToken });
     } else {
       return res.status(404).json({ error: "User not found" });
     }
@@ -159,7 +165,7 @@ const login = async (req, res) => {
 };
 
 const referesh = async (req, res) => {
-  refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies.refreshToken ?? req.body.refreshToken;
 
   if (!refreshToken || refreshToken == null) {
     return res.status(400).json({ error: "Refresh token is required." });
@@ -170,7 +176,7 @@ const referesh = async (req, res) => {
 
     const userId = decodedToken.id;
 
-    const newAccessToken = generateAccessToken({ id: userId });
+    const newAccessToken = requestAccessTokens({ id: userId });
 
     res.status(200).json({
       accessToken: newAccessToken,
@@ -182,15 +188,19 @@ const referesh = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { id } = req.body;
+  const refreshToken = req.cookies.refreshToken ?? req.body.refreshToken;
+
+  if (!refreshToken || refreshToken == null) {
+    return res.status(400).json({ error: "Refresh token is required." });
+  }
+
   try {
-    if (!id) {
-      res.status(500).json({ error: "Bad Request" });
-    }
-    const tokens = requestUserTokens({ id });
-    res.status(200).json(tokens);
+    res.clearCookie("refreshToken");
+    return res
+      .status(200)
+      .json({ message: "Token invalidated & logout successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" + error });
+    return res.status(500).json({ error: "Internal Server Error" + error });
   }
 };
 
@@ -198,6 +208,7 @@ module.exports = {
   referesh,
   login,
   register,
+  logout,
   getAll,
   getById,
   create,

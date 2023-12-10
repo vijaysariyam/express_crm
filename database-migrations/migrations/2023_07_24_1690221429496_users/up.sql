@@ -1,18 +1,4 @@
-/*8 Tables*/
-
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS user_t;
-DROP TABLE IF EXISTS candidate_t;
-DROP TABLE IF EXISTS currency_t;
-DROP TABLE IF EXISTS address_t;
-DROP TABLE IF EXISTS phone_number_t;
-DROP TABLE IF EXISTS education_t;
-DROP TABLE IF EXISTS skill_t;
-DROP TABLE IF EXISTS experience_t;
-SET FOREIGN_KEY_CHECKS = 1;
-
-
-
+-- Add migration UP SQL statements.
 CREATE TABLE user_t (
     id VARCHAR(36) PRIMARY KEY NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
@@ -91,5 +77,3 @@ CREATE TABLE experience_t (
     years INT NOT NULL,
     FOREIGN KEY (candidate_id) REFERENCES candidate_t(id)
 );
-
-
