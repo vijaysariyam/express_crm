@@ -1,6 +1,6 @@
 const connectToDatabase = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
-const { requestUserTokens } = require("../services/jwt.js");
+const { requestUserTokens } = require("../middleware/jwt.js");
 // Get all data
 const getAll = async (req, res) => {
   try {
@@ -146,6 +146,9 @@ const login = async (req, res) => {
     if (data) {
       //need data row
       const tokens = requestUserTokens(data.dataValues);
+      res.cookie("refreshToken", String(tokens.refreshToken), {
+        httpOnly: true,
+      });
       res.status(200).json(tokens);
     } else {
       return res.status(404).json({ error: "User not found" });
@@ -156,6 +159,19 @@ const login = async (req, res) => {
 };
 
 const referesh = async (req, res) => {
+  const { id } = req.body;
+  try {
+    if (!id) {
+      res.status(500).json({ error: "Bad Request" });
+    }
+    const tokens = requestUserTokens({ id });
+    res.status(200).json(tokens);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" + error });
+  }
+};
+
+const logout = async (req, res) => {
   const { id } = req.body;
   try {
     if (!id) {

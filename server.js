@@ -67,11 +67,14 @@
 
 */
 "use strict";
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 const express = require("express");
 const bodyParser = require("body-parser");
 const { join } = require("path");
 const connectToDatabase = require("./config/db");
-
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 const countryRouter = require("./routes/country.route.js");
 const userRouter = require("./routes/User.Router.js");
 const candidateRouter = require("./routes/Candidate.Router.js");
@@ -115,6 +118,7 @@ app.use(apiVersion, userRouter);
 app.use(apiVersion, candidateRouter);
 app.use(apiVersion, currencyRouter);
 app.use(apiVersion, adressRouter);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/", async (req, res) => {
   try {

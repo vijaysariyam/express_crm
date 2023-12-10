@@ -1,8 +1,8 @@
-const express = require('express');
-const { authenticateToken } = require('../services/jwt.js');
+const express = require("express");
+const { authenticateToken } = require("../middleware/jwt.js");
 
 const router = express.Router();
-const CandidateController = require('../controllers/Candidate.Controller.js'); // Update the path accordingly
+const CandidateController = require("../controllers/Candidate.Controller.js"); // Update the path accordingly
 
 // Routes for User CRUD operations
 
@@ -11,10 +11,14 @@ const CandidateController = require('../controllers/Candidate.Controller.js'); /
 // router.put('/candidate/:id', CandidateController.updateById);
 // router.delete('/candidate/:id', CandidateController.deleteById);
 
-router.post('/candidates', authenticateToken, CandidateController.create);
-router.post('/candidates/:id', authenticateToken, CandidateController.updateById);
-router.get('/candidates/:id', authenticateToken, CandidateController.getById);
+router.post("/candidates", authenticateToken, CandidateController.create);
+router.post(
+  "/candidates/:id",
+  authenticateToken,
+  CandidateController.updateById
+);
+router.get("/candidates/:id", authenticateToken, CandidateController.getById);
 // router.delete('/candidates/:id', CandidateController.deleteById);
-router.get('/candidates', authenticateToken, CandidateController.getAll);
-router.post('/candidate/search', authenticateToken, CandidateController.search);
+router.get("/candidates", authenticateToken, CandidateController.getAll);
+router.post("/candidate/search", authenticateToken, CandidateController.search);
 module.exports = router;
