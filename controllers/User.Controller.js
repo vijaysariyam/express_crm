@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const connectToDatabase = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
 const {
@@ -108,8 +109,10 @@ const deleteById = async (req, res) => {
 
 // Create a new data
 const register = async (req, res) => {
-  const { email, password, first_name, last_name } = req.body;
+  var { email, password, first_name, last_name } = req.body;
   const id = uuidv4();
+  const hashedPassword = await bcrypt.hash(password, 10);
+  password = hashedPassword;
   try {
     const { User } = await connectToDatabase();
     const [newUser, created] = await User.findOrCreate({
@@ -138,16 +141,24 @@ const register = async (req, res) => {
 
 // Get data by ID
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  var { email, password } = req.body;
   try {
     const { User } = await connectToDatabase();
+
     const data = await User.findOne({
       where: {
         email: email,
-        password: password,
       },
     });
     if (data) {
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        data.dataValues.password
+      );
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: "Invalid credentials" });
+      }
+
       const accessToken = requestAccessTokens(data.dataValues);
       const refreshToken = requestRefereshTokens(data.dataValues);
       res.cookie("refreshToken", String(refreshToken), {
