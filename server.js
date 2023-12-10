@@ -68,7 +68,6 @@
 */
 "use strict";
 const cookieParser = require("cookie-parser");
-app.use(cookieParser());
 const express = require("express");
 const bodyParser = require("body-parser");
 const { join } = require("path");
@@ -86,6 +85,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 console.log("Project path :" + __dirname);
 app.use("/", express.static(join(__dirname, "public")));
+app.use(cookieParser());
 
 const cors = require("cors");
 const corsOptions = { credentials: true, origin: "*" };

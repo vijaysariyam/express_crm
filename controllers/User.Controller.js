@@ -159,13 +159,23 @@ const login = async (req, res) => {
 };
 
 const referesh = async (req, res) => {
-  const { id } = req.body;
+  refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken || refreshToken == null) {
+    return res.status(400).json({ error: "Refresh token is required." });
+  }
+
   try {
-    if (!id) {
-      res.status(500).json({ error: "Bad Request" });
-    }
-    const tokens = requestUserTokens({ id });
-    res.status(200).json(tokens);
+    const decodedToken = verifyRefreshToken(refreshToken);
+
+    const userId = decodedToken.id;
+
+    const newAccessToken = generateAccessToken({ id: userId });
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+      message: "New Token Generated Successfully",
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" + error });
   }

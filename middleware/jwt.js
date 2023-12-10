@@ -11,13 +11,24 @@ const generateRefreshToken = (payload) => {
   return refreshToken;
 };
 
-function requestUserTokens(user) {
-  const user = { id };
-  const accessToken = jwt.sign(user, privateKey, {
+function verifyRefreshToken(refreshToken) {
+  try {
+    const decodedToken = jwt.verify(refreshToken, privateKey, {
+      algorithms: ["RS256"],
+    });
+    return decodedToken;
+  } catch (error) {
+    throw new Error("Invalid refresh token.");
+  }
+}
+
+function requestUserTokens(payload) {
+  const userData = payload;
+  const accessToken = jwt.sign(userData, privateKey, {
     algorithm: "RS256",
     expiresIn: "1h",
   });
-  const refreshToken = jwt.sign(user, privateKey, {
+  const refreshToken = jwt.sign(userData, privateKey, {
     algorithm: "RS256",
     expiresIn: "1h",
   });
@@ -66,4 +77,4 @@ function authenticateToken(req, res, next) {
   );
 }
 
-module.exports = { requestUserTokens, authenticateToken };
+module.exports = { requestUserTokens, authenticateToken, verifyRefreshToken };

@@ -275,9 +275,20 @@ describe("Register & Login", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .set("Refresh", `Bearer ${refreshToken}`)
       .send(searchQuery)
+      .expect(200);
+  });
+
+  it("DELETE /v1/candidates/{id} should return(200) and delete candidate data using id.it delete newly added test candidate", async () => {
+    await request(app)
+      .delete(`/v1/candidates/${candidateID}`)
+      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Refresh", `Bearer ${refreshToken}`)
       .expect(200)
       .then((response) => {
-        expect(response.body.length).toBeGreaterThanOrEqual(1);
+        expect(response.body).toHaveProperty(
+          "message",
+          "Candidate deleted successfully"
+        );
       });
   });
 });

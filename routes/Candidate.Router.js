@@ -18,7 +18,7 @@ router.post(
   CandidateController.updateById
 );
 router.get("/candidates/:id", authenticateToken, CandidateController.getById);
-// router.delete('/candidates/:id', CandidateController.deleteById);
+router.delete("/candidates/:id", CandidateController.deleteById);
 router.get("/candidates", authenticateToken, CandidateController.getAll);
 router.post("/candidate/search", authenticateToken, CandidateController.search);
 module.exports = router;
