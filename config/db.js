@@ -1,3 +1,5 @@
+//const dotenv = require("dotenv");
+//dotenv.config();
 const Sequelize = require("sequelize");
 
 const UserModel = require("../models/user_t.Model");
@@ -8,6 +10,18 @@ const EducationModel = require("../models/education_t.Model");
 const SkillModel = require("../models/skill_t.Model");
 const ExperienceModel = require("../models/experience_t.Model");
 const CurrencyModel = require("../models/currency_t.Model");
+
+// const sequelize = new Sequelize(
+//   process.env.DB_NAME,
+//   process.env.DB_USER,
+//   process.env.DB_PASSWORD,,
+//   {
+//     dialect: "mysql",
+//     host: process.env.DB_HOST,
+//     port: 3306,
+//     logging: false,
+//   }
+// );
 
 const sequelize = new Sequelize(
   "u276789778_vijaytest",

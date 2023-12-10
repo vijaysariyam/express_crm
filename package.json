@@ -23,7 +23,8 @@
 		"swagger-ui-express": "^5.0.0",
 		"uuid": "^8.3.2",
 		"goose": "^0.0.3",
-        "goose.js": "^0.1.1"
+        "goose.js": "^0.1.1",
+		"dotenv": "^16.3.1"
 	},
 	"keywords": [],
 	"description": ""
